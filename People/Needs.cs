@@ -23,7 +23,7 @@ public struct ExistenceNeeds : INeedsCollection
     public Need Reproduction { get; set; }
     public Need Shelter { get; set; }
     public Need Security { get; set; }
-    public HashSet<Need> All => new HashSet<Need>() { Food, Water, Sleep, Reproduction, Shelter, Security };
+    public IQueryable<Need> All => new HashSet<Need>() { Food, Water, Sleep, Reproduction, Shelter, Security }.AsQueryable();
 }
 
 public struct RelatednessNeeds : INeedsCollection
@@ -32,8 +32,8 @@ public struct RelatednessNeeds : INeedsCollection
     public Need Love { get; set; }
     public Need Intimacy { get; set; }
     public Need Family { get; set; }
-    public HashSet<Need> All => new HashSet<Need>() { Friendship, Love, Intimacy, Family
-};
+    public IQueryable<Need> All => new HashSet<Need>() { Friendship, Love, Intimacy, Family
+}.AsQueryable();
 }
 
 public struct GrowthNeeds : INeedsCollection
@@ -45,7 +45,7 @@ public struct GrowthNeeds : INeedsCollection
     public Need Freedom { get; set; }
     public Need Achievement { get; set; }
     public Need Autonomy { get; set; }
-    public HashSet<Need> All => new HashSet<Need>() { Respect, SelfEsteem, Status, Recognition, Autonomy, Freedom, Achievement };
+    public IQueryable<Need> All => new HashSet<Need>() { Respect, SelfEsteem, Status, Recognition, Autonomy, Freedom, Achievement }.AsQueryable();
 
 }
 
@@ -57,5 +57,5 @@ public class Need
 
 public interface INeedsCollection
 {
-    public HashSet<Need> All { get; }
+    public IQueryable<Need> All { get; }
 }
