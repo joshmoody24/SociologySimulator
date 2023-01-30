@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 class Program
 {
@@ -58,7 +59,10 @@ class Program
 
         Needs joshNeeds = new Needs(joshExistence, joshRelatedness, joshGrowth);
 
-        Person josh = new Person("Josh", "Moody", americanCulture, joshTraits);
-        Console.WriteLine(josh.FirstName);
+        Knowledge emptyKnowledge = new Knowledge();
+
+        Person josh = new Person("Josh", "Moody", americanCulture, joshTraits, emptyKnowledge);
+        Topic topic = Topic.HeavenlyFather;
+        Console.WriteLine("Josh's knowledge of " + topic.Name + " is " + josh.Knowledge.Of(topic));
     }
 }
