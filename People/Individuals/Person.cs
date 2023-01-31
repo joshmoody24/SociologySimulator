@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 
-class Person
+public abstract class Person : ICommunicator
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public Values Values { get; set; }
-    public Culture Culture { get; set; }
-    public Traits Traits { get; set; }
-    public Needs Needs { get; set; }
-    public HashSet<Emotion> CurrentEmotions { get; set; }
-    public Knowledge Knowledge { get; set; }
+    public string FirstName { get; private set; }
+    public string LastName { get; private set; }
+    public string Name => FirstName + " " + LastName;
+    public Values Values { get; private set; }
+    public Culture Culture { get; private set; }
+    public Traits Traits { get; private set; }
+    public Needs Needs { get; private set; }
+    public HashSet<Emotion> CurrentEmotions { get; private set; }
+    public Knowledge Knowledge { get; private set; }
 
     public Person(string firstName, string lastName, Culture culture, Traits traits, Knowledge knowledge)
     {
@@ -21,4 +22,8 @@ class Person
         CurrentEmotions = new HashSet<Emotion>();
         Knowledge = knowledge;
     }
+
+    public abstract Message GenerateMessage(Person recipient);
+    public abstract void ReceiveMessage(Message message);
+    public abstract void DeliverMessage(Message message);
 }

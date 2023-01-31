@@ -20,7 +20,7 @@ public class Topic : Enumeration
     public static readonly Topic ChurchOfJesusChrist = new Topic("The Church of Jesus Christ", JesusChrist);
     public static readonly Topic GreatApostasy = new Topic("Great Apostasy", ChurchOfJesusChrist);
     public static readonly Topic JosephSmith = new Topic("Joseph Smith", GreatApostasy);
-    public static readonly Topic BookOfMormon = new Topic("The Book of Mormon", JosephSmith);
+    public static readonly Topic BookOfMormon = new Topic("The Book of Mormon", ChurchOfJesusChrist);
 
     // plan of salvation
     public static readonly Topic PremortalLife = new Topic("Premortal Life", HeavenlyFather);

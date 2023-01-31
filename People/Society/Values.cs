@@ -1,6 +1,6 @@
 using System;
 
-struct Values
+public struct Values
 {
 
     private float _collectivism;
