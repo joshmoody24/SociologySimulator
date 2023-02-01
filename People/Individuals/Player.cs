@@ -32,7 +32,7 @@ public class Player : Person
             Console.WriteLine("Conversation is over");
             return;
         }
-
+        PreviousTopic = message.Topic;
         Message response = GenerateMessage(message.Speaker);
         DeliverMessage(response);
     }
@@ -45,28 +45,32 @@ public class Player : Person
 
     Topic ChooseTopic()
     {
-        return ChooseFromList<Topic>(Topic.GetAll<Topic>(), "Choose a topic: ");
+        IEnumerable<Topic> options = Topic.SimilarTopics(PreviousTopic, 9, 0.1);
+        return ChooseFromList<Topic>(options, "Topics");
     }
 
     MessageType ChooseMessageType()
     {
-        return ChooseFromList<MessageType>(MessageType.GetAll<MessageType>(), "Choose a message type: ");
+        return ChooseFromList<MessageType>(MessageType.GetAll<MessageType>(), "Message Types");
     }
 
     T ChooseFromList<T>(IEnumerable<T> collection, string prompt)
     {
         int id = 0;
-        foreach (T element in collection)
-        {
-            Console.WriteLine(id + 1 + ". " + element.ToString());
-            id++;
-        }
         int chosen = -1;
         while (chosen < 0 || chosen >= id)
         {
-            Console.Write(prompt);
-            chosen = Convert.ToInt32(Console.ReadLine()) - 1;
+            Console.WriteLine(prompt);
+            foreach (T element in collection)
+            {
+                Console.WriteLine(id + 1 + ". " + element.ToString());
+                id++;
+            }
+            Console.Write("Enter a number: ");
+            if (!int.TryParse(Console.ReadLine(), out chosen)) continue;
+            chosen -= 1;
         }
+        Console.WriteLine(collection.ElementAt<T>(chosen).ToString() + " selected");
         return collection.ElementAt<T>(chosen);
     }
 }

@@ -11,6 +11,7 @@ public abstract class Person : ICommunicator
     public Needs Needs { get; private set; }
     public HashSet<Emotion> CurrentEmotions { get; private set; }
     public Knowledge Knowledge { get; private set; }
+    public Topic PreviousTopic { get; set; }
 
     public Person(string firstName, string lastName, Culture culture, Traits traits, Knowledge knowledge)
     {
