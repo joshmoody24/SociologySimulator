@@ -21,7 +21,7 @@ public class Player : Person
             Topic = topic,
             Speaker = this,
             Recipient = recipient,
-            Information = 1f,
+            Quality = 1f,
         };
     }
 
@@ -45,7 +45,7 @@ public class Player : Person
 
     Topic ChooseTopic()
     {
-        IEnumerable<Topic> options = Topic.SimilarTopics(PreviousTopic, 9, 0.1);
+        IEnumerable<Topic> options = Topic.SimilarTopics(PreviousTopic, 5, 0.1);
         return ChooseFromList<Topic>(options, "Topics");
     }
 

@@ -16,9 +16,9 @@ public class Npc : Person
         {
             Speaker = this,
             Recipient = recipient,
-            Topic = RandomFromList<Topic>(Topic.SimilarTopics(PreviousTopic, 9, 0.1)),
+            Topic = RandomFromList<Topic>(Topic.SimilarTopics(PreviousTopic, 5, 0.1)),
             Type = RandomFromList<MessageType>(MessageType.GetAll<MessageType>()),
-            Information = 1f,
+            Quality = 1f,
         };
     }
 
