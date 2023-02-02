@@ -44,7 +44,23 @@ public class Person : ICommunicator
             {
                 tree = tree.GetChild(queryStep);
             }
-            Console.WriteLine("Answer to the question: " + tree.Value);
+            string result;
+            switch (message.EndingStep)
+            {
+                case (QueryStepType.Reduce):
+                    result = tree.Reduction.ToString();
+                    break;
+                case (QueryStepType.Rank):
+                    result = tree.RankedChildren.ToString();
+                    break;
+                case (QueryStepType.DrillDown):
+                    result = tree.Value.ToString();
+                    break;
+                default:
+                    result = "error";
+                    break;
+            }
+            Console.WriteLine("Answer to the question: " + result);
         }
 
         // todo: reject messages from other conversations somehow

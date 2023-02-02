@@ -16,8 +16,8 @@ public class Player : IPersonDriver
     {
         MessageType type = ChooseMessageType();
         Person toQuery = type == MessageType.Request ? receiver : Person;
-        List<string> query = ChooseQuery(toQuery);
-        return new Message(Person, receiver, query, type);
+        (List<string>, QueryStepType) query = ChooseQuery(toQuery);
+        return new Message(Person, receiver, query.Item1, type, query.Item2);
     }
 
     /*
@@ -29,17 +29,27 @@ public class Player : IPersonDriver
     }
     */
 
-    List<string> ChooseQuery(Person person)
+    (List<string>, QueryStepType) ChooseQuery(Person person)
     {
         List<string> query = new List<string>();
         var tree = RequestableProperty.BuildRequestableTree(person);
-        while(tree.IsFloat == false)
+        QueryStepType stepType = QueryStepType.DrillDown;
+        while(stepType == QueryStepType.DrillDown)
         {
             tree = ChooseChildProperty(tree);
             Console.WriteLine("Adding " + tree.Info.Name);
             query.Add(tree.Info.Name);
+            // todo: choose this property or drill down further?
+            List<QueryStepType> possibleSteps = new List<QueryStepType>();
+            possibleSteps.Add(QueryStepType.Reduce);
+            if(tree.IsFloat == false)
+            {
+                possibleSteps.Add(QueryStepType.DrillDown);
+                possibleSteps.Add(QueryStepType.Rank);
+            }
+            stepType = ChooseFromList<QueryStepType>(possibleSteps, "What action?");
         }
-        return query;
+        return (query, stepType);
     }
 
     RequestableProperty ChooseChildProperty(RequestableProperty property)

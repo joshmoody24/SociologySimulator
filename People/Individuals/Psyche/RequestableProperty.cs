@@ -10,20 +10,27 @@ public class RequestableProperty
     public PropertyInfo Info { get; set; }
     public Object Value { get; set; }
     public List<RequestableProperty> Children { get; set; }
+    public bool IsReducible { get; set; }
+    public bool IsRankable { get; set; }
     public bool IsFloat => (Children == null || Children.Count == 0);
     public float Reduction => IsFloat ? (float)Value : Children.Select(rn => rn.Reduction).Average();
+    public List<RequestableProperty> RankedChildren => Children.OrderBy(rn => rn.Reduction).ToList();
 
-    public RequestableProperty(PropertyInfo info, Object value, List<RequestableProperty> children)
+    public RequestableProperty(PropertyInfo info, Object value, List<RequestableProperty> children, bool isReducible = false, bool isRankable = false)
     {
         Info = info;
         Value = value;
         Children = children;
+        IsReducible = isReducible;
+        IsRankable = isRankable;
     }
 
     public static RequestableProperty BuildRequestableTree(Object instance, PropertyInfo info = null, int depth = 0)
     {
         List<RequestableProperty> children = new List<RequestableProperty>();
         Type t = instance.GetType();
+        bool isRankable = info ==  null ? false : Attribute.GetCustomAttribute(info.PropertyType, typeof(Rankable)) != null;
+        bool isReducible = info == null ? false : Attribute.GetCustomAttribute(info.PropertyType, typeof(Reducible)) != null;
         IEnumerable<PropertyInfo> requestableProperties = t.GetProperties()
             .Where(p => p.PropertyType == typeof(float) || Attribute.GetCustomAttribute(p.PropertyType, typeof(Requestable)) != null);
         foreach (PropertyInfo prop in requestableProperties)
@@ -31,7 +38,7 @@ public class RequestableProperty
             Object obj = prop.GetValue(instance);
             children.Add(BuildRequestableTree(obj, prop, depth + 1));
         }
-        return new RequestableProperty(info, instance, children);
+        return new RequestableProperty(info, instance, children, isReducible, isRankable);
     }
 
     public override string ToString()
