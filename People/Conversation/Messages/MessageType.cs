@@ -10,6 +10,6 @@ public class MessageType : Enumeration
         Description = description;
     }
 
-    public static MessageType Request = new MessageType("Ask Something", "asked", "by asking about");
-    public static MessageType Share = new MessageType("Share Something", "explained to", "about");
+    public static MessageType Request = new MessageType("Ask Something", "asked", "something about");
+    public static MessageType Share = new MessageType("Share Something", "shared with", "something about");
 }

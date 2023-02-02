@@ -1,5 +1,7 @@
 using System;
 
+[Requestable]
+[Rankable]
 public struct Values
 {
 
@@ -22,26 +24,31 @@ public struct Values
     }
 
     // fundamental cultural differences
+    [NotRequestable]
     public float Collectivism
     {
         get { return _collectivism; }
         set { _collectivism = Math.Clamp(value, 0f, 1f); }
     }
+    [NotRequestable]
     public float UncertaintyAvoidance
     {
         get { return _uncertaintyAvoidance; }
         set { _uncertaintyAvoidance = Math.Clamp(value, 0f, 1f); }
     }
+    [NotRequestable]
     public float Masculinity
     {
         get { return _masculinity; }
         set { _masculinity = Math.Clamp(value, 0f, 1f); }
     }
+    [NotRequestable]
     public float ShortTermOrientation
     {
         get { return _shortTermOrientation; }
         set { _shortTermOrientation = Math.Clamp(value, 0f, 1f); }
     }
+    [NotRequestable]
     public float PowerDistance
     {
         get { return _powerDistance; }

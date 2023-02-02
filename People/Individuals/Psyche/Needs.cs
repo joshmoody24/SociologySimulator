@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+[Requestable]
+[Rankable]
 public struct Needs
 {
     public ExistenceNeeds Existence { get; set; }
@@ -15,7 +17,10 @@ public struct Needs
     }
 }
 
-public struct ExistenceNeeds : INeedsCollection
+[Requestable]
+[Rankable]
+[Reducible]
+public struct ExistenceNeeds
 {
     public Need Food { get; set; }
     public Need Water { get; set; }
@@ -23,20 +28,24 @@ public struct ExistenceNeeds : INeedsCollection
     public Need Reproduction { get; set; }
     public Need Shelter { get; set; }
     public Need Security { get; set; }
-    public IQueryable<Need> All => new HashSet<Need>() { Food, Water, Sleep, Reproduction, Shelter, Security }.AsQueryable();
 }
 
-public struct RelatednessNeeds : INeedsCollection
+
+[Requestable]
+[Rankable]
+[Reducible]
+public struct RelatednessNeeds
 {
     public Need Friendship { get; set; }
     public Need Love { get; set; }
     public Need Intimacy { get; set; }
     public Need Family { get; set; }
-    public IQueryable<Need> All => new HashSet<Need>() { Friendship, Love, Intimacy, Family
-}.AsQueryable();
 }
 
-public struct GrowthNeeds : INeedsCollection
+[Requestable]
+[Rankable]
+[Reducible]
+public struct GrowthNeeds
 {
     public Need Respect { get; set; }
     public Need SelfEsteem { get; set; }
@@ -45,17 +54,13 @@ public struct GrowthNeeds : INeedsCollection
     public Need Freedom { get; set; }
     public Need Achievement { get; set; }
     public Need Autonomy { get; set; }
-    public IQueryable<Need> All => new HashSet<Need>() { Respect, SelfEsteem, Status, Recognition, Autonomy, Freedom, Achievement }.AsQueryable();
-
 }
 
+[Requestable]
+[Reducible]
 public class Need
 {
     public float Importance { get; set; }
     public float Fulfilled { get; set; }
-}
-
-public interface INeedsCollection
-{
-    public IQueryable<Need> All { get; }
+    public float CurrentPressure => Importance * Fulfilled;
 }

@@ -62,15 +62,11 @@ public class PersonFactory
 
         Knowledge emptyKnowledge = new Knowledge();
 
-        Person josh;
-        if (playerControlled)
-        {
-            josh = new Player("Josh", "Moody", AmericanCulture, joshTraits, emptyKnowledge);
-        }
-        else
-        {
-            josh = new Npc("Josh", "Moody", AmericanCulture, joshTraits, emptyKnowledge);
-        }
+        BasicPsyche joshPsyche = new BasicPsyche(AmericanCulture, joshTraits, emptyKnowledge, joshNeeds);
+
+        Person josh = new Person("Josh", "Moody", joshPsyche);
+        IPersonDriver driver = playerControlled ? new Player(josh) : new Npc(josh);
+        josh.Driver = driver;
         return josh;
     }
 
@@ -118,15 +114,13 @@ public class PersonFactory
 
         Knowledge emptyKnowledge = new Knowledge();
 
-        Person matthew;
-        if (playerControlled)
-        {
-            matthew = new Player("Matthew", "Moody", AmericanCulture, matthewTraits, emptyKnowledge);
-        }
-        else
-        {
-            matthew = new Npc("Matthew", "Moody", AmericanCulture, matthewTraits, emptyKnowledge);
-        }
+        BasicPsyche matthewPsyche = new BasicPsyche(AmericanCulture, matthewTraits, emptyKnowledge, matthewNeeds);
+
+
+        Person matthew = new Person("Matthew", "Moody", matthewPsyche);
+
+        IPersonDriver driver = playerControlled ? new Player(matthew) : new Npc(matthew);
+        matthew.Driver = driver;
         return matthew;
     }
 }

@@ -1,9 +1,10 @@
-public abstract class Message
+public class Message
 {
-	public MessageType Type { get; set; }
+	// todo: won't need message type (just 'requested data')
+	public MessageType Type;
 	public Topic Topic { get; set; }
 	public Person Speaker { get; set; }
-	public Person Recipient { get; set; }
+	public Person Receiver { get; set; }
 	public float Quality { get; set; }
 	public Message ResponseTo {get;set;}
 
@@ -11,13 +12,13 @@ public abstract class Message
 		Type = type;
 		Topic = topic;
 		Speaker = speaker;
-		Recipient = recipient;
-		responseTo = responseTo;
+		Receiver = recipient;
+		ResponseTo = responseTo;
 		Quality = 1f;
 	}
 
 	public override string ToString()
 	{
-			return Speaker.Name + " " + Type.Verb + " " + Recipient.Name + " " + Type.Description + " " + Topic;
+			return Speaker.Name + " " + Type.Verb + " " + Receiver.Name + " " + Type.Description + " " + Topic;
 	}
 }

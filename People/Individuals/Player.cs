@@ -1,57 +1,37 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
-public class Player : Person
+public class Player : IPersonDriver
 {
+    Person Person { get; }
 
-    public Player(string firstName, string lastName, Culture culture, Traits traits, Knowledge knowledge) : base(firstName, lastName, culture, traits, knowledge)
+    public Player(Person person)
     {
-
+        Person = person;
     }
 
-    public override Message GenerateMessage(Person recipient)
+    public Message GenerateMessage(Person receiver)
     {
-        Console.WriteLine(Name + " is preparing to talk to " + recipient.Name);
         MessageType type = ChooseMessageType();
         Topic topic = ChooseTopic();
-        return new Message
-        {
-            Type = type,
-            Topic = topic,
-            Speaker = this,
-            Recipient = recipient,
-            Quality = 1f,
-        };
-    }
-
-    public override void ReceiveMessage(Message message)
-    {
-        if (message.Type == MessageType.Closing)
-        {
-            Console.WriteLine("Conversation is over");
-            return;
-        }
-        PreviousTopic = message.Topic;
-        Message response = GenerateMessage(message.Speaker);
-        DeliverMessage(response);
-    }
-
-    public override void DeliverMessage(Message message)
-    {
-        Console.WriteLine(message.ToString());
-        message.Recipient.ReceiveMessage(message);
+        return new Message(Person, receiver, type, topic);
     }
 
     Topic ChooseTopic()
     {
-        IEnumerable<Topic> options = Topic.SimilarTopics(PreviousTopic, 5, 0.1);
+        // temp debug stuff
+        // generate list of queryable things
+        // Psyche.GetRequestableProperties(Person.Psyche.GetType());
+        Topic previousTopic = Person.CurrentConversation?.History.Last().Topic;
+        IEnumerable<Topic> options = Topic.SimilarTopics(previousTopic, 5, 0.1);
         return ChooseFromList<Topic>(options, "Topics");
     }
 
     MessageType ChooseMessageType()
     {
-        return ChooseFromList<MessageType>(MessageType.GetAll<MessageType>(), "Message Types");
+        return ChooseFromList(MessageType.GetAll<MessageType>(), "Message Types");
     }
 
     T ChooseFromList<T>(IEnumerable<T> collection, string prompt)

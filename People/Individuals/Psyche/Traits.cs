@@ -1,3 +1,4 @@
+[Requestable]
 public struct Traits {
 
 	public Traits(float openness, float conscientiousness, float extraversion, float agreeableness, float neuroticism){
@@ -15,6 +16,8 @@ public struct Traits {
 	public NeuroticismTraits Neuroticism {get;set;}
 }
 
+[Requestable]
+[Reducible]
 public struct OpennessTraits {
 	
 	public OpennessTraits(float openness){
@@ -40,6 +43,8 @@ public struct OpennessTraits {
 	public float SwayedByEmotion {get;set;}
 }
 
+[Requestable]
+[Reducible]
 public struct ConscientiousnessTraits {
 
 	public ConscientiousnessTraits(float conscientiousness){
@@ -63,6 +68,8 @@ public struct ConscientiousnessTraits {
 	public float Perfectionism {get;set;}
 }
 
+[Requestable]
+[Reducible]
 public struct ExtraversionTraits {
 
 	public ExtraversionTraits(float extraversion){
@@ -87,6 +94,8 @@ public struct ExtraversionTraits {
 
 }
 
+[Requestable]
+[Reducible]
 public struct AgreeablenessTraits {
 
 	public AgreeablenessTraits(float agreeableness){
@@ -111,6 +120,8 @@ public struct AgreeablenessTraits {
 
 }
 
+[Requestable]
+[Reducible]
 public struct NeuroticismTraits {
 
 	public NeuroticismTraits(float neuroticism){

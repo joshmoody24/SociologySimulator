@@ -19,12 +19,9 @@ public class Topic
         DependsOn = dependsOn;
     }
 
-    public static List<Topic> ReadCSV(string path)
+    public static void LoadFromFile(string path)
     {
-        string text = File.ReadAllText(path);
-        List<Topic> topics = JsonSerializer.Deserialize<List<Topic>>(text);
-        AllTopics = topics;
-        return topics;
+        AllTopics = DataImporter.LoadFromJson<List<Topic>>(path);
     }
 
     // randomness is between 0-2ish

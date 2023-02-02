@@ -1,3 +1,3 @@
 public interface IPersonDriver {
-	public Message GenerateMessage();
+	public Message GenerateMessage(Person receiver);
 }
