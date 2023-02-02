@@ -12,10 +12,23 @@ public class Npc : IPersonDriver
 
     public Message GenerateMessage(Person receiver)
     {
-        Topic previousTopic = Person.CurrentConversation.History.Last().Topic;
-        Topic topic = RandomFromList<Topic>(Topic.SimilarTopics(previousTopic, 5, 0.1));
         MessageType type = RandomFromList<MessageType>(MessageType.GetAll<MessageType>());
-        return new Message(Person, receiver, type, topic);
+        Person toQuery = type == MessageType.Request ? receiver : Person;
+        List<string> query = GenerateQuery(toQuery);
+        return new Message(Person, receiver, query, type);
+    }
+
+    public List<String> GenerateQuery(Person person)
+    {
+        List<string> query = new List<string>();
+        var tree = RequestableProperty.BuildRequestableTree(person);
+        while (tree.IsFloat == false)
+        {
+            tree = RandomFromList<RequestableProperty>(tree.Children);
+            Console.WriteLine("NPC Adding " + tree.Info.Name);
+            query.Add(tree.Info.Name);
+        }
+        return query;
     }
 
     T RandomFromList<T>(IEnumerable<T> collection)

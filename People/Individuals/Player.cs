@@ -15,18 +15,36 @@ public class Player : IPersonDriver
     public Message GenerateMessage(Person receiver)
     {
         MessageType type = ChooseMessageType();
-        Topic topic = ChooseTopic();
-        return new Message(Person, receiver, type, topic);
+        Person toQuery = type == MessageType.Request ? receiver : Person;
+        List<string> query = ChooseQuery(toQuery);
+        return new Message(Person, receiver, query, type);
     }
 
+    /*
     Topic ChooseTopic()
     {
-        // temp debug stuff
-        // generate list of queryable things
-        // Psyche.GetRequestableProperties(Person.Psyche.GetType());
         Topic previousTopic = Person.CurrentConversation?.History.Last().Topic;
         IEnumerable<Topic> options = Topic.SimilarTopics(previousTopic, 5, 0.1);
         return ChooseFromList<Topic>(options, "Topics");
+    }
+    */
+
+    List<string> ChooseQuery(Person person)
+    {
+        List<string> query = new List<string>();
+        var tree = RequestableProperty.BuildRequestableTree(person);
+        while(tree.IsFloat == false)
+        {
+            tree = ChooseChildProperty(tree);
+            Console.WriteLine("Adding " + tree.Info.Name);
+            query.Add(tree.Info.Name);
+        }
+        return query;
+    }
+
+    RequestableProperty ChooseChildProperty(RequestableProperty property)
+    {
+        return ChooseFromList<RequestableProperty>(property.Children, "Which property?");
     }
 
     MessageType ChooseMessageType()
