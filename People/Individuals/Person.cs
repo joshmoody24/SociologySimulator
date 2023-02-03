@@ -36,33 +36,6 @@ public class Person : ICommunicator
         if (CurrentConversation == null) CurrentConversation = new Conversation();
         CurrentConversation.History.Add(message);
 
-        // answer question (if one exists)
-        if(message.Type == MessageType.Request && message.Receiver == this)
-        {
-            RequestableProperty tree = RequestableProperty.BuildRequestableTree(this);
-            foreach(string queryStep in message.Query)
-            {
-                tree = tree.GetChild(queryStep);
-            }
-            string result;
-            switch (message.EndingStep)
-            {
-                case (QueryStepType.Reduce):
-                    result = tree.Reduction.ToString();
-                    break;
-                case (QueryStepType.Rank):
-                    result = tree.RankedChildren.ToString();
-                    break;
-                case (QueryStepType.DrillDown):
-                    result = tree.Value.ToString();
-                    break;
-                default:
-                    result = "error";
-                    break;
-            }
-            Console.WriteLine("Answer to the question: " + result);
-        }
-
         // todo: reject messages from other conversations somehow
         Message response = GenerateMessage(message.Speaker);
         DeliverMessage(response);

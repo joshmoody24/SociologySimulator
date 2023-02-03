@@ -2,5 +2,5 @@
 public struct Culture
 {
     public string Name { get; set; }
-    public Values Values { get; set; }
+    public Value Values { get; set; }
 }

@@ -1,0 +1,24 @@
+﻿Law|Collectivism
+Loyalty|Collectivism
+Family|Collectivism
+Friendship|Collectivism
+Power|Power Distance
+Cunning|Collectivism
+Fairness|Collectivism
+Tradition|Uncertainty Avoidance
+Cooperation|Collectivism
+Stoicism|Masculinity
+Introspection|Short Term Orientation
+Tranquility|Uncertainty Avoidance
+Merriment|Uncertainty Avoidance
+Skill|Collectivism
+HardWork|Masculinity
+Competition|Masculinity
+LeisureTime|Short Term Orientation
+Commerce|Masculinity
+Nature|Masculinity
+Peace|Masculinity
+Knowledge|Masculinity
+Honesty|Collectivism
+Humility|Collectivism
+Altruism|Collectivism

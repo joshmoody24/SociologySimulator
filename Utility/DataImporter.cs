@@ -14,4 +14,14 @@ public class DataImporter
         T data = JsonSerializer.Deserialize<T>(text);
         return data;
     }
+
+    public static List<string> LoadFromText(string path)
+    {
+        return new List<string>(File.ReadAllLines("./Resources/" + path));
+    }
+}
+
+public class FileFormatException : Exception
+{
+
 }

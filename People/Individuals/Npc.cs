@@ -14,11 +14,11 @@ public class Npc : IPersonDriver
     {
         MessageType type = RandomFromList<MessageType>(MessageType.GetAll<MessageType>());
         Person toQuery = type == MessageType.Request ? receiver : Person;
-        (List<string>, QueryStepType) query = GenerateQuery(toQuery);
-        return new Message(Person, receiver, query.Item1, type, query.Item2);
+        List<string> query = GenerateQuery(toQuery);
+        return new Message(Person, receiver, query, type);
     }
 
-    public (List<String>, QueryStepType) GenerateQuery(Person person)
+    public List<String> GenerateQuery(Person person)
     {
         List<string> query = new List<string>();
         var tree = RequestableProperty.BuildRequestableTree(person);
@@ -28,7 +28,7 @@ public class Npc : IPersonDriver
             Console.WriteLine("NPC Adding " + tree.Info.Name);
             query.Add(tree.Info.Name);
         }
-        return (query, QueryStepType.DrillDown);
+        return query;
     }
 
     T RandomFromList<T>(IEnumerable<T> collection)

@@ -12,4 +12,13 @@
 		</Content>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="Resources\NeedCategories.txt" />
+	  <None Remove="Resources\Needs.txt" />
+	  <None Remove="Resources\TraitCategories.txt" />
+	  <None Remove="Resources\Traits.txt" />
+	  <None Remove="Resources\ValueCategories.txt" />
+	  <None Remove="Resources\Values.txt" />
+	</ItemGroup>
+
 </Project>

@@ -10,9 +10,8 @@ public class Message
 	public List<string> Query { get; set; }
 	public float Quality { get; set; }
 	public Message ResponseTo {get;set;}
-	public QueryStepType EndingStep { get; set; }
 
-	public Message(Person speaker, Person recipient, List<string> query, MessageType type, QueryStepType endingStep, Message responseTo = null)
+	public Message(Person speaker, Person recipient, List<string> query, MessageType type, Message responseTo = null)
     {
 		Type = type;
 		Speaker = speaker;
@@ -20,7 +19,6 @@ public class Message
 		Query = query;
 		ResponseTo = responseTo;
 		Quality = 1f;
-		EndingStep = endingStep;
 	}
 
 	public string QueryString()

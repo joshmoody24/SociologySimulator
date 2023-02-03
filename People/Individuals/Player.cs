@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -16,45 +18,38 @@ public class Player : IPersonDriver
     {
         MessageType type = ChooseMessageType();
         Person toQuery = type == MessageType.Request ? receiver : Person;
-        (List<string>, QueryStepType) query = ChooseQuery(toQuery);
-        return new Message(Person, receiver, query.Item1, type, query.Item2);
+        List<string> query = ChooseQuery(toQuery.Psyche);
+        return new Message(Person, receiver, query, type, null);
     }
 
-    /*
-    Topic ChooseTopic()
+    public List<string> ChooseQuery(BasicPsyche psyche)
     {
-        Topic previousTopic = Person.CurrentConversation?.History.Last().Topic;
-        IEnumerable<Topic> options = Topic.SimilarTopics(previousTopic, 5, 0.1);
-        return ChooseFromList<Topic>(options, "Topics");
-    }
-    */
+        // find the most abstract non-homogenous ITypedObject type
+        /*
+        IEnumerable<PropertyInfo> queryableSetProperties = psyche.GetType().GetProperties()
+            .Where(p => p.PropertyType.GetInterfaces().Contains(typeof(IEnumerable))
+            && p.PropertyType.GetGenericArguments()[0].GetInterfaces().Contains(typeof(ITyped)));
+        */
+        //&& p.PropertyType.GetGenericArguments()[0].GetInterface("ITypedObject`1") != null);
+        // same but renamable
+        /*
+        && p.PropertyType.GetGenericArguments()[0].GetInterfaces()
+        .Where(i => i.IsGenericType)
+        .Where(i => i.GetGenericTypeDefinition() == typeof(ITyped)).FirstOrDefault() != null);
+        */
 
-    (List<string>, QueryStepType) ChooseQuery(Person person)
-    {
-        List<string> query = new List<string>();
-        var tree = RequestableProperty.BuildRequestableTree(person);
-        QueryStepType stepType = QueryStepType.DrillDown;
-        while(stepType == QueryStepType.DrillDown)
-        {
-            tree = ChooseChildProperty(tree);
-            Console.WriteLine("Adding " + tree.Info.Name);
-            query.Add(tree.Info.Name);
-            // todo: choose this property or drill down further?
-            List<QueryStepType> possibleSteps = new List<QueryStepType>();
-            possibleSteps.Add(QueryStepType.Reduce);
-            if(tree.IsFloat == false)
-            {
-                possibleSteps.Add(QueryStepType.DrillDown);
-                possibleSteps.Add(QueryStepType.Rank);
-            }
-            stepType = ChooseFromList<QueryStepType>(possibleSteps, "What action?");
-        }
-        return (query, stepType);
-    }
+        // debug question examples
 
-    RequestableProperty ChooseChildProperty(RequestableProperty property)
-    {
-        return ChooseFromList<RequestableProperty>(property.Children, "Which property?");
+        // how important are existence needs to you?
+        var q1 = psyche.Needs.Where(n => n.Need.Category.Name == NeedCategory.All.First(nc => nc.Name == "Existence").Name).Select(n => n.Importance).Average();
+
+        // what value is most important to you?
+        var q2 = psyche.Values.OrderByDescending(v => v.Importance).First().Value.Name;
+
+        // how introverted are you?
+        var q3 = 1f - psyche.Traits.Where(t => t.Trait.Category.Name == TraitCategory.All.First(tc => tc.Name == "Agreeableness").Name).Select(t => t.Status).Average();
+
+       return null;
     }
 
     MessageType ChooseMessageType()
