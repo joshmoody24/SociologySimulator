@@ -20,8 +20,8 @@ public class PersonFactory
     };
     */
 
-    public static Person GenerateJosh(bool playerControlled)
-    {
+    //public static Person GenerateJosh(bool playerControlled)
+   // {
         /*
         Trait joshTraits = new Trait(
                 openness: 0.875f,
@@ -61,6 +61,7 @@ public class PersonFactory
         };
     */
 
+        /*
         var joshNeeds = new HashSet<PsycheNeed>()
         {
             new PsycheNeed(Need.All.First(n => n.Name == "Food"), 0.99f, 0.92f),
@@ -80,10 +81,12 @@ public class PersonFactory
         IPersonDriver driver = playerControlled ? new Player(josh) : new Npc(josh);
         josh.Driver = driver;
         return josh;
-    }
+        */
+    //}
 
-    public static Person GenerateMatthew(bool playerControlled)
-    {
+    //public static Person GenerateMatthew(bool playerControlled)
+    //{
+        /*
         var needs = new HashSet<PsycheNeed>()
         {
             new PsycheNeed(Need.All.First(n => n.Name == "Water"), 0.9999f, 0.83f),
@@ -105,5 +108,6 @@ public class PersonFactory
         IPersonDriver driver = playerControlled ? new Player(matthew) : new Npc(matthew);
         matthew.Driver = driver;
         return matthew;
-    }
+        */
+    //}
 }

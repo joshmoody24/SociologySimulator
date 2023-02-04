@@ -28,6 +28,6 @@ public class Message
 
 	public override string ToString()
 	{
-			return Speaker.Name + " " + Type.Verb + " " + Receiver.Name + " " + Type.Description + " " + QueryString();
+			return Speaker.Character.Name + " " + Type.Verb + " " + Receiver.Character.Name + " " + Type.Description + " " + QueryString();
 	}
 }
