@@ -15,6 +15,8 @@ namespace SociologySimulator.Utility
             int chosen = -1;
             while (chosen < 0 || chosen >= id)
             {
+                id = 0;
+                chosen = -1;
                 Console.WriteLine(prompt);
                 foreach (T element in collection)
                 {

@@ -3,10 +3,11 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Intrinsics.X86;
-using System.Xml.Linq;
 using SociologySimulator.Models;
 using Microsoft.EntityFrameworkCore;
 using SociologySimulator.Utility;
+using System.Xml.Linq;
+using SociologySimulator.Models.Tags;
 
 class Program
 {
@@ -24,46 +25,45 @@ class Program
 
         // Message greeting = josh.GenerateMessage(matthew);
         // josh.DeliverMessage(greeting);
-        Console.WriteLine("Loading...");
 
-        using var db = new SocialContext();
+        Person josh = new PersonBuilder().createJoshPlayer();
+        // get root node
+        Node selected = josh.Character.Mind.First(n => n.Path.Length == josh.Character.Mind.Min(m => m.Path.Length));
 
-        // new stuff: how to query the db
-        Person josh = new Person(db.Characters.Include(c => c.Mind).First());
-        IPersonDriver player = new Player(josh);
-        Node selected = josh.Character.Mind;
-        while(db.Closures.Where(c => c.ParentId == selected.Id).Count() > 1){
-            Console.WriteLine("You are examining " + selected.Name);
+        while(josh.Character.GetDescendants(selected).Count() > 0){
+            Console.WriteLine("You are examining " + josh.Character.FirstName + "'s " + selected.Name);
+
             // choose something to aggregate over
-            List<List<string>> leafTagNames = db.Nodes.Where(n => db.Nodes.Select(n => n.ParentId).Contains(n.Id) == false && db.Closures.FirstOrDefault(c => c.ParentId == selected.Id && c.ChildId == n.Id) != null)
-                .Select(n => n.Tags.Select(t => t.Name).ToList()).ToList();
+            List<List<Tag>> leafTags = josh.Character.GetLeaves(selected)
+                .Select(n => n.Tags.ToList())
+                .ToList();
 
-            HashSet<string> namesInCommon = leafTagNames.Skip(1).Aggregate(new HashSet<string>(leafTagNames.First()),
+            HashSet<Tag> tagsInCommon = leafTags.Skip(1).Aggregate(new HashSet<Tag>(leafTags.First()),
                 (set, tags) => set.Intersect(tags).ToHashSet()
             );
 
             // var temp = Input.ChooseFromList<Node>(leafDescendantsTags, "Which data to aggregate over?");
-            var children = db.Nodes.Where(n => n.ParentId == selected.Id);
             int counter = 1;
             Console.WriteLine("Questions you could theoretically ask right now:");
-            foreach (string name in namesInCommon)
+            foreach (Tag tag in tagsInCommon)
             {
-                Console.WriteLine(counter + ". What is the overall " + name + " of " + selected.Name + "? (todo)");
-                counter++;
-                Console.WriteLine(counter + ". Which type of " + selected.Name + " has the highest " + name + "? (todo)");
-                counter++;
-                foreach(var child in children)
+                if(tag.Type == TagType.Number)
                 {
-                    Console.WriteLine(counter + ". Which type of " + child.Name + " has the highest " + name + "? (todo)");
+                    Console.WriteLine(counter + ". What is the overall " + tag.Name + " of " + selected.Name + "? (todo)");
                     counter++;
-                    Console.WriteLine(counter + ". What is the max value of " + child.Name + " in " + name + "? (todo)");
+                    Console.WriteLine(counter + ". Which type of " + selected.Name + " has the highest " + tag.Name + "? (todo)");
                     counter++;
+                }
+                else if(tag.Type == TagType.String)
+                {
+                    Console.WriteLine(counter + ". What is your " + tag.Name + "?");
                 }
             }
 
             // choose which node to drill down into
-            selected = Input.ChooseFromList<Node>(children, "Choose next node:");
+            selected = Input.ChooseFromList<Node>(josh.Character.GetChildren(selected), "Choose next node:");
         }
+        Console.WriteLine("Your selected node is: " + selected.NameWithTags());
         Console.WriteLine("\nGame Finished");
     }
 }
